@@ -1,0 +1,26 @@
+# The main pipeline for bundle
+
+resources:
+  pipelines:
+    bundle_etl:
+      name: bundle_etl_${bundle.target}
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      root_path: "../src/bundle_etl"
+
+      tags:
+        target: ${bundle.target}
+
+      run_as:
+        service_principal_name: ${var.service_principal}
+
+      libraries:
+        - glob:
+            include: ../src/bundle_etl/transformations/**
+
+      environment:
+        dependencies:
+          # We include every dependency defined by pyproject.toml by defining an editable environment
+          # that points to the folder where pyproject.toml is deployed.
+          - --editable ${workspace.file_path}

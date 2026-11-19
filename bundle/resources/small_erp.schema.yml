@@ -1,0 +1,16 @@
+# Unity Catalog schema resource for Declarative Automation Bundle
+resources:
+  schemas:
+    small_erp_schema:
+      name: db
+      catalog_name: ${resources.catalogs.small_erp_catalog.name}
+      comment: "Main DB schema in small_erp_${bundle.target}"
+      grants:
+        - principal: stefangiovan@gmail.com
+          privileges:
+            - USE_SCHEMA
+            - CREATE_TABLE
+        - principal: ${var.service_principal}
+          privileges:
+            - USE_SCHEMA
+            - CREATE_TABLE

@@ -1,0 +1,48 @@
+# This is a Declarative Automation Bundle definition for bundle.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: bundle
+  uuid: 0a60ac11-3c1c-4898-a1c7-cdeac93fb17c
+  # Catalog resources require the direct deployment engine.
+  engine: direct
+
+include:
+  - resources/*.yml
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --wheel
+
+# Variable declarations. These variables are assigned in the dev/prod targets below.
+variables:
+  catalog:
+    description: The catalog to use
+  schema:
+    description: The schema to use
+    default: db
+  service_principal:
+    description: Application ID of the target's service principal (svc_small_erp_dev / svc_small_erp_prod)
+targets:
+  dev:
+    # No 'mode: development' here: its '[dev user]' prefix renames every resource
+    # (e.g. the schema becomes dev_stefangiovan_db). Job/pipeline names are suffixed
+    # with the target instead, so dev and prod don't collide.
+    default: true
+    workspace:
+      host: https://dbc-b5cd9353-118f.cloud.databricks.com
+    variables:
+      catalog: small_erp_dev
+      service_principal: 6d15266d-df26-466f-810d-ee18f56d226f
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-b5cd9353-118f.cloud.databricks.com
+      # We explicitly deploy to /Workspace/Users/stefangiovan@gmail.com to make sure we only have a single copy.
+      root_path: /Workspace/Users/stefangiovan@gmail.com/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      catalog: small_erp_prod
+      service_principal: 21e51133-e526-4659-901f-714de34e06d2
+    permissions:
+      - user_name: stefangiovan@gmail.com
+        level: CAN_MANAGE

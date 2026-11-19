@@ -1,0 +1,14 @@
+# Unity Catalog resource for Declarative Automation Bundle
+resources:
+  catalogs:
+    small_erp_catalog:
+      name: small_erp_${bundle.target}
+      comment: "Catalog created for target ${bundle.target} via DABs."
+      grants:
+        - principal: stefangiovan@gmail.com
+          privileges:
+            - USE_CATALOG
+            - CREATE_SCHEMA
+        - principal: ${var.service_principal}
+          privileges:
+            - USE_CATALOG
