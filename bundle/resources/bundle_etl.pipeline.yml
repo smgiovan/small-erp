@@ -9,6 +9,10 @@ resources:
       serverless: true
       root_path: "../src/bundle_etl"
 
+      configuration:
+        # Volume holding CSV batches consumed by CDC pipeline
+        volume_path: /Volumes/${var.catalog}/${var.schema}
+
       tags:
         target: ${bundle.target}
 

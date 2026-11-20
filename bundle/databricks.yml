@@ -14,7 +14,6 @@ artifacts:
     type: whl
     build: uv build --wheel
 
-# Variable declarations. These variables are assigned in the dev/prod targets below.
 variables:
   catalog:
     description: The catalog to use
@@ -25,9 +24,6 @@ variables:
     description: Application ID of the target's service principal (svc_small_erp_dev / svc_small_erp_prod)
 targets:
   dev:
-    # No 'mode: development' here: its '[dev user]' prefix renames every resource
-    # (e.g. the schema becomes dev_stefangiovan_db). Job/pipeline names are suffixed
-    # with the target instead, so dev and prod don't collide.
     default: true
     workspace:
       host: https://dbc-b5cd9353-118f.cloud.databricks.com
@@ -38,7 +34,6 @@ targets:
     mode: production
     workspace:
       host: https://dbc-b5cd9353-118f.cloud.databricks.com
-      # We explicitly deploy to /Workspace/Users/stefangiovan@gmail.com to make sure we only have a single copy.
       root_path: /Workspace/Users/stefangiovan@gmail.com/.bundle/${bundle.name}/${bundle.target}
     variables:
       catalog: small_erp_prod

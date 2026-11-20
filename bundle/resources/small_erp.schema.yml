@@ -10,7 +10,10 @@ resources:
           privileges:
             - USE_SCHEMA
             - CREATE_TABLE
+            - READ_VOLUME
+            - SELECT
         - principal: ${var.service_principal}
           privileges:
             - USE_SCHEMA
             - CREATE_TABLE
+            - READ VOLUME
